@@ -4,7 +4,8 @@ import cors from 'cors';
 import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 import cardRoutes from './routes/cardRoutes';
-
+import boardRoutes from './routes/boardRoutes';
+import listRoutes from './routes/listRoutes';
 dotenv.config();
 
 connectDB();
@@ -19,10 +20,10 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRoutes);
-// app.use('/api/boards', boardRoutes);
-// app.use('/api/lists', listRoutes);
-// app.use('/api/boards/:boardId/lists', listRoutes);
-// app.use('/api/cards', cardRoutes);
+app.use('/api/boards', boardRoutes);
+app.use('/api/lists', listRoutes);
+app.use('/api/boards/:boardId/lists', listRoutes);
+app.use('/api/cards', cardRoutes);
 app.use('/api/lists/:listId/cards', cardRoutes);
 
 const PORT = process.env.PORT || 5000;
