@@ -1,0 +1,29 @@
+###
+GET http://localhost:5000/api/lists/691391356062607001877448/cards
+
+###
+POST http://localhost:5000/api/lists/691391356062607001877448/cards
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "title": "Card 1",
+    "description": "Description 1",
+    "dueDate": "2026-03-12",
+    "priority": "High",
+    "assignedTo": "69ad6eb46194244b41da945f"
+}
+
+###
+PUT http://localhost:5000/api/lists/691391356062607001877448/cards/691391886062607001877450
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "title": "Card 1",
+    "description": "Description 1"
+}
+
+###
+DELETE http://localhost:5000/api/lists/691391356062607001877448/cards/691391886062607001877450
+Authorization: Bearer <token>
