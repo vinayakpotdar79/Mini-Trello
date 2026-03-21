@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import cardRoutes from './routes/cardRoutes';
 import boardRoutes from './routes/boardRoutes';
 import listRoutes from './routes/listRoutes';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 connectDB();
@@ -14,6 +15,7 @@ const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req: Request, res: Response) => {
   res.send('API is running...');
