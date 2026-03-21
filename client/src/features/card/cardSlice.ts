@@ -78,6 +78,21 @@ export const deleteCard = createAsyncThunk(
   }
 );
 
+export const reorderCardsAPI = createAsyncThunk(
+  'card/reorder',
+  async ({ listId, cardIds }: { listId: string; cardIds: string[] }, thunkAPI: any) => {
+    try {
+      return await listCardAPI.reorderCards(listId, cardIds);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const cardSlice = createSlice({
   name: 'card',
   initialState,

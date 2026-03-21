@@ -44,6 +44,11 @@ const deleteCard = async (cardId: string) => {
   return response.data;
 };
 
+const reorderCards = async (listId: string, cardIds: string[]) => {
+  const response = await axiosInstance.put(`${API_URL}lists/${listId}/cards/reorder`, { cardIds });
+  return response.data;
+};
+
 const listCardAPI = {
   getLists,
   createList,
@@ -53,6 +58,7 @@ const listCardAPI = {
   createCard,
   updateCard,
   deleteCard,
+  reorderCards,
 };
 
 export default listCardAPI;
