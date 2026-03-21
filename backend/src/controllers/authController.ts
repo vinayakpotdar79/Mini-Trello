@@ -71,7 +71,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
         email: user.email,
       });
     } else {
-      res.status(401).json({ message: 'Invalid credentials' });
+      res.status(400).json({ message: 'Invalid credentials' });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
