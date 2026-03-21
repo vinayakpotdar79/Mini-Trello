@@ -80,3 +80,27 @@ export const deleteCard = async (req: Request, res: Response): Promise<void> => 
     } as ApiResponse<null>);
   }
 };
+
+export const reorderCards = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { listId } = req.params;
+    const { cardIds } = req.body;
+
+    // Update positions for each card
+    const updatePromises = cardIds.map((cardId: string, index: number) =>
+      Card.findByIdAndUpdate(cardId, { position: index })
+    );
+
+    await Promise.all(updatePromises);
+
+    res.status(200).json({
+      success: true,
+      message: 'Cards reordered successfully'
+    } as ApiResponse<string>);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    } as ApiResponse<null>);
+  }
+};
