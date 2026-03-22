@@ -1,0 +1,88 @@
+import bcrypt from 'bcrypt';
+import User from '../models/User';
+import { generateToken } from '../utils/generateToken';
+//register user
+export const registerUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            res.status(400).json({ message: 'Please add all fields' });
+            return;
+        }
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            res.status(400).json({ message: 'User already exists' });
+            return;
+        }
+        const salt = await bcrypt.genSalt(10);
+        console.log(salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const user = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+        });
+        if (user) {
+            res.status(201).json({
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+            });
+        }
+        else {
+            res.status(400).json({ message: 'Invalid user data' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+//login user
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (user && user.password && (await bcrypt.compare(password, user.password))) {
+            // console.log(process.env.NODE_ENV)
+            const isProduction = process.env.NODE_ENV === "production";
+            // console.log(isProduction)
+            res.cookie("token", generateToken(user.id), {
+                httpOnly: true,
+                secure: isProduction, // true only in prod
+                sameSite: isProduction ? "none" : "lax",
+                maxAge: 24 * 60 * 60 * 1000, // 1 day
+            });
+            res.json({
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+            });
+        }
+        else {
+            res.status(400).json({ message: 'Invalid credentials' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+//logout
+export const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie('token');
+        res.status(200).json({ message: 'User logged out' });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+//get user data
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user?.id).select('-password');
+        res.status(200).json(user);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
