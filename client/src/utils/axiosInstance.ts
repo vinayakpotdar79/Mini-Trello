@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../app/store';
 import { logout } from '../features/auth/authSlice';
 const axiosInstance = axios.create({
-  baseURL: '/',
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 // Response interceptor to handle 401 errors
