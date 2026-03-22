@@ -58,11 +58,14 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     const user = await User.findOne({ email });
 
     if (user && user.password && (await bcrypt.compare(password, user.password))) {
-      res.cookie('token', generateToken(user.id), {
+      // console.log(process.env.NODE_ENV)
+      const isProduction = process.env.NODE_ENV === "production";
+      // console.log(isProduction)
+      res.cookie("token", generateToken(user.id), {
         httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000,
+        secure: isProduction,        // true only in prod
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
       });
 
       res.json({
