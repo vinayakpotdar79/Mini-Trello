@@ -6,7 +6,7 @@ export const getBoards = async (req: Request, res: Response): Promise<void> => {
   try {
     const boards = await Board.find({
       $or: [{ ownerId: req.user.id }, { members: req.user.id }],
-    });
+    }).populate('members', 'name email');
     res.status(200).json({
       success: true,
       data: boards
@@ -29,11 +29,12 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
       } as ApiResponse<null>);
       return;
     }
-    const board = await Board.create({
+    let board = await Board.create({
       title,
       ownerId: req.user.id,
       members: [req.user.id],
     });
+    board = await board.populate('members', 'name email');
     res.status(201).json({
       success: true,
       data: board
@@ -48,13 +49,13 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
 
 export const getBoardById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const board = await Board.findById(req.params.id);
+    const board = await Board.findById(req.params.id).populate('members', 'name email');
     if (!board) {
       res.status(404).json({ message: 'Board not found' });
       return;
     }
     // Check access
-    if (board.ownerId.toString() !== req.user.id && !board.members.includes(req.user.id)) {
+    if (board.ownerId.toString() !== req.user.id && !board.members.some((m: any) => (m._id || m).toString() === req.user.id)) {
       res.status(401).json({
         success: false,
         message: 'Not authorized'

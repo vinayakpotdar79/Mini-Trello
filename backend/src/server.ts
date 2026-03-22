@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import cardRoutes from './routes/cardRoutes';
 import boardRoutes from './routes/boardRoutes';
 import listRoutes from './routes/listRoutes';
+import joinBoardRoutes from './routes/JoinBoardRotes';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
@@ -27,7 +28,7 @@ app.use('/api/lists', listRoutes);
 app.use('/api/boards/:boardId/lists', listRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/lists/:listId/cards', cardRoutes);
-
+app.use('/api/join-board',joinBoardRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
