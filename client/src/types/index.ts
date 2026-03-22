@@ -9,7 +9,7 @@ export interface Board {
   _id: string;
   title: string;
   ownerId: string;
-  members: string[];
+  members: (string | User)[];
   createdAt: string;
   updatedAt: string;
 }

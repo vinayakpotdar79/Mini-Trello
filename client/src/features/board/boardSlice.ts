@@ -3,7 +3,7 @@ import boardAPI from './boardAPI';
 
 interface BoardState {
   boards: any[];
-  currentBoard: any | null;
+  currentBoard: any| null;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
@@ -63,6 +63,9 @@ export const boardSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
+    updateCurrentBoard: (state, action) => {
+      state.currentBoard = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -96,4 +99,5 @@ export const boardSlice = createSlice({
 });
 
 export const { reset } = boardSlice.actions;
+export const { updateCurrentBoard } = boardSlice.actions;
 export default boardSlice.reducer;

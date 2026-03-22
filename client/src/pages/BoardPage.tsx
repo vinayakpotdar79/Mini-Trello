@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { getLists, reset as resetLists } from '../features/list/listSlice';
 import { getCards, reset as resetCards, updateCard, reorderCards, reorderCardsAPI } from '../features/card/cardSlice';
-import { getBoards } from '../features/board/boardSlice';
+import { getBoards,updateCurrentBoard } from '../features/board/boardSlice';
 import type {
   DragOverEvent,
   DragEndEvent,
@@ -46,9 +46,13 @@ const BoardPage = () => {
   const { lists, isLoading: listsLoading } = useAppSelector((state) => state.list);
   const { cards } = useAppSelector((state) => state.card);
   const { boards } = useAppSelector((state) => state.board);
-
   const board = boardId ? boards.find((item) => item._id === boardId) : null;
-
+  
+  // Update current board in store when board changes (do not dispatch during render)
+  useEffect(() => {
+    dispatch(updateCurrentBoard(board));
+  }, [board, dispatch]);
+  // console.log('Current Board:', board);
   const [activeCard, setActiveCard] = useState<any>(null);
 
   const boardOperations = useBoardOperations(boardId);

@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import BoardPage from './pages/BoardPage';
+import JoinPage from './pages/JoinPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Navbar from './components/Navbar';
@@ -24,6 +25,11 @@ function App() {
           <Route path="/board/:id" element={
             <ProtectedRoute>
               <BoardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/join/:token" element={
+            <ProtectedRoute>
+              <JoinPage />
             </ProtectedRoute>
           } />
           <Route path="/login" element={<LoginPage />} />
