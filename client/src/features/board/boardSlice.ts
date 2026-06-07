@@ -53,6 +53,22 @@ export const getBoards = createAsyncThunk(
   }
 );
 
+//Delete board
+export const deleteBoard = createAsyncThunk(
+  'board/delete',
+  async (boardId: string, thunkAPI: any) => {
+    try {
+      return await boardAPI.deleteBoard(boardId);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,

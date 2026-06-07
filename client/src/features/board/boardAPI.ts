@@ -20,10 +20,17 @@ const getBoard = async (boardId: string) => {
   return response.data;
 };
 
+// Delete board
+const deleteBoard = async (boardId: string) => {
+  const response = await axiosInstance.delete(API_URL + boardId);
+  return response.data;
+};
+
 const boardAPI = {
   createBoard,
   getBoards,
   getBoard,
+  deleteBoard,
 };
 
 export default boardAPI;

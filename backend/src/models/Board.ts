@@ -4,7 +4,7 @@ const boardSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    inviteToken: {type: String,unique: true},
+    inviteToken: {type: String,unique: true, sparse: true},// sparse-unique only if field is filled
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   {

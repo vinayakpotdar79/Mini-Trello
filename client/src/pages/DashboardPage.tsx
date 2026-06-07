@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getBoards, createBoard, reset } from '../features/board/boardSlice';
-import { Plus, Layout, Loader2, Clock, Users } from 'lucide-react';
+import { getBoards, createBoard, reset,deleteBoard } from '../features/board/boardSlice';
+import { Plus, Layout, Loader2, Clock, Users,Trash2 } from 'lucide-react';
 
 const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +36,17 @@ const DashboardPage = () => {
       setIsModalOpen(false);
     }
   };
+
+  const handleDeleteBoard = async (e: React.MouseEvent<HTMLButtonElement>, boardId: string, boardTitle: string) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const confirmed = window.confirm(
+    `Are you sure you want to delete "${boardTitle}"?`
+  );
+  if (!confirmed) return;
+  await dispatch(deleteBoard(boardId));
+  await dispatch(getBoards());
+};
 
   if (isLoading && boards.length === 0) {
     return (
@@ -72,6 +83,13 @@ const DashboardPage = () => {
               <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
                 <Layout size={20} />
               </div>
+                <button
+                  onClick={(e) =>
+                  handleDeleteBoard(e,board._id,board.title)}
+                  className="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                title="Delete board">
+                <Trash2 size={18} />
+                </button>
             </div>
             <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {board.title}
